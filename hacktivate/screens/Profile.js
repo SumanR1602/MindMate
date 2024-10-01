@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TextInput, Button } from 'react-native';
 
-export default function EditProfileScreen() {
+export default function Profile() {
   return (
     <View style={styles.container}>
       {/* Header */}
