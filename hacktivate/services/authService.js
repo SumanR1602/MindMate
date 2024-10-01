@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/auth'; // Replace with your server URL
+const API_URL = 'http://localhost:5000/api/auth';
 
-// User registration
 const register = async (username, email, password) => {
   const response = await axios.post(`${API_URL}/register`, {
     username,

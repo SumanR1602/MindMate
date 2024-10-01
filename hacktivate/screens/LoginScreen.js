@@ -10,6 +10,7 @@ const LoginScreen = ({ navigation }) => {
     try {
       const data = await login(email, password);
       Alert.alert('Login successful', `Welcome back, ${data.username}!`);
+      navigation.navigate('Main');
     } catch (error) {
       Alert.alert('Login failed', error.response.data.message || 'Something went wrong');
     }

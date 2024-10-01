@@ -11,7 +11,7 @@ const RegisterScreen = ({ navigation }) => {
     try {
       await register(username, email, password);
       Alert.alert('Registration successful', 'You can now log in!');
-      navigation.navigate('Login');
+      navigation.navigate('LoginScreen');
     } catch (error) {
       Alert.alert('Registration failed', error.response.data.message || 'Something went wrong');
     }
