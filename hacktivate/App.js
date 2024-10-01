@@ -39,8 +39,8 @@ function HomeScreen() {
           onPress={() => navigation.navigate('CHATBOT')}
         />
         <Button
-          title="Login"
-          onPress={() => navigation.navigate('LOGIN')}
+          title="Profile"
+          onPress={() => navigation.navigate('PROFILE')}
         />
         <Button
           title="Register"
