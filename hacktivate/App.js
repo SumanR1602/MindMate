@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 function MainTabNavigator() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="HelloWorld" component={Profile} />
+      <Tab.Screen name="Mental Assistant App" component={Profile} />
       <Tab.Screen name="Chatbot" component={ChatBotScreen} />
     </Tab.Navigator>
   );

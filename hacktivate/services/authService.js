@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 const API_URL = 'http://localhost:5000/api/auth';
 
 const register = async (username, email, password) => {
@@ -11,7 +10,6 @@ const register = async (username, email, password) => {
   return response.data;
 };
 
-// User login
 const login = async (email, password) => {
   const response = await axios.post(`${API_URL}/login`, {
     email,
