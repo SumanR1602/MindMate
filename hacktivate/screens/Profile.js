@@ -6,7 +6,7 @@ export default function EditProfileScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Edit Profile</Text>
+        <Text style={styles.headerTitle}>Profile</Text>
       </View>
 
       {/* Profile Image */}
@@ -20,11 +20,11 @@ export default function EditProfileScreen() {
       <View style={styles.infoContainer}>
         <View style={styles.infoRow}>
           <Text style={styles.label}>First Name:</Text>
-          <Text style={styles.value}>Daniel</Text>
+          <Text style={styles.value}>Temp</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.label}>Last Name:</Text>
-          <Text style={styles.value}>Johnson</Text>
+          <Text style={styles.value}>User</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.label}>Birthday:</Text>
