@@ -1,18 +1,36 @@
 // screens/ChatbotScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import axios from 'axios'; // Import Axios for HTTP requests
+import { usePoints } from '../components/PointsContext'; // Import Points context
 
 const ChatbotScreen = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const { incrementPoints } = usePoints(); // Use Points context
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim()) {
       const userMessage = { id: Date.now().toString(), text: input, sender: 'user' };
-      const botResponse = { id: Date.now().toString() + 'bot', text: 'Hello! How can I help you?', sender: 'bot' };
-
-      setMessages((prevMessages) => [...prevMessages, userMessage, botResponse]);
+      setMessages((prevMessages) => [...prevMessages, userMessage]);
       setInput('');
+
+      try {
+        // Send user message to the backend
+        const response = await axios.post('http://localhost:5000/chat', {
+          user_id: 'user_id', // Replace with actual user ID logic
+          message: input,
+        });
+
+        // Add bot response to messages
+        const botResponse = { id: Date.now().toString() + 'bot', text: response.data.bot_response, sender: 'bot' };
+        setMessages((prevMessages) => [...prevMessages, botResponse]);
+        
+        // Increment points for user activity
+        incrementPoints();
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
     }
   };
 
@@ -28,7 +46,6 @@ const ChatbotScreen = () => {
               </View>
             )}
             keyExtractor={(item) => item.id}
-            
           />
           <View style={styles.inputContainer}>
             <TextInput

@@ -18,6 +18,7 @@ router.post('/register', async (req, res) => {
 
   try {
     await user.save();
+    console.log(`User registered: ${username}`); // Log the username on registration
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -27,7 +28,7 @@ router.post('/register', async (req, res) => {
 // User Login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  
+
   const user = await User.findOne({ email });
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
@@ -38,9 +39,12 @@ router.post('/login', async (req, res) => {
     return res.status(401).json({ message: 'Invalid credentials' });
   }
 
-  // Optionally, you can generate a token for session management
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || "hactivatehackathon", { expiresIn: '1h' });
+  console.log("login done")
+  // Log the username on successful login
+  console.log(`User logged in: ${user.username}`);
 
+  // Optionally, you can generate a token for session management
+  const token = jwt.sign({ userId: user._id}, process.env.JWT_SECRET || "hactivatehackathon", { expiresIn: '1h' });
   res.status(200).json({ message: 'Login successful', token });
 });
 
