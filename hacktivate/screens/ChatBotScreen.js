@@ -1,64 +1,73 @@
 // screens/ChatbotScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import axios from 'axios'; // Import Axios for HTTP requests
-import { usePoints } from '../components/PointsContext'; // Import Points context
+import axios from 'axios'; // Import Axios
 
 const ChatbotScreen = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const { incrementPoints } = usePoints(); // Use Points context
 
   const handleSend = async () => {
     if (input.trim()) {
       const userMessage = { id: Date.now().toString(), text: input, sender: 'user' };
-      setMessages((prevMessages) => [...prevMessages, userMessage]);
-      setInput('');
 
+      // Update messages with user's message
+      setMessages((prevMessages) => [...prevMessages, userMessage]);
+      
       try {
-        // Send user message to the backend
-        const response = await axios.post('http://localhost:5000/chat', {
-          user_id: 'user_id', // Replace with actual user ID logic
+        // Make POST request to Flask API
+        const response = await axios.post('http://127.0.0.1:5001/chat', {
+          user_id: 'user_id_placeholder', // Replace with actual user ID
           message: input,
         });
 
-        // Add bot response to messages
-        const botResponse = { id: Date.now().toString() + 'bot', text: response.data.bot_response, sender: 'bot' };
+        // Get bot response from the API response
+        const botResponse = {
+          id: Date.now().toString() + 'bot',
+          text: response.data.bot_response,
+          sender: 'bot'
+        };
+
+        // Update messages with bot's response
         setMessages((prevMessages) => [...prevMessages, botResponse]);
-        
-        // Increment points for user activity
-        incrementPoints();
       } catch (error) {
-        console.error("Error sending message:", error);
+        console.error('Error sending message:', error.message);
+        const errorMessage = {
+          id: Date.now().toString() + 'error',
+          text: 'Error: Could not send message.',
+          sender: 'bot',
+        };
+        setMessages((prevMessages) => [...prevMessages, errorMessage]);
       }
+
+      // Clear the input field
+      setInput('');
     }
   };
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.chatContainer}>
-          <FlatList
-            data={messages}
-            renderItem={({ item }) => (
-              <View style={item.sender === 'user' ? styles.userMessage : styles.botMessage}>
-                <Text style={styles.messageText}>{item.text}</Text>
-              </View>
-            )}
-            keyExtractor={(item) => item.id}
+      <View style={styles.chatContainer}>
+        <FlatList
+          data={messages}
+          renderItem={({ item }) => (
+            <View style={item.sender === 'user' ? styles.userMessage : styles.botMessage}>
+              <Text style={styles.messageText}>{item.text}</Text>
+            </View>
+          )}
+          keyExtractor={(item) => item.id}
+        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={input}
+            onChangeText={setInput}
+            placeholder="Type a message..."
+            placeholderTextColor="#999"
           />
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              value={input}
-              onChangeText={setInput}
-              placeholder="Type a message..."
-              placeholderTextColor="#999"
-            />
-            <Button title="Send" onPress={handleSend} />
-          </View>
+          <Button title="Send" onPress={handleSend} />
         </View>
-      </TouchableWithoutFeedback>
+      </View>
     </KeyboardAvoidingView>
   );
 };
