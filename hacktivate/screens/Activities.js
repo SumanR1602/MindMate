@@ -1,82 +1,87 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-
+import ThoughtComponent from './ThoughtComponent';
+import { useNavigation } from '@react-navigation/native';
+import Points from '../components/Points';
 
 const imageMap = {
-          'tree': require('../assets/tree.jpeg'),
-          'walking': require('../assets/walking.jpeg'),
-          'dance': require('../assets/dance.jpeg'),
-        };
-        
-        
-// Individual Card Component
-function Card({ item }) {
+  'tree': require('../assets/tree.jpeg'),
+  'walking': require('../assets/walking.jpeg'),
+  'dance': require('../assets/dance.jpeg'),
+};
+
+function Card({ item, onPress }) {
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={onPress}>
       <Image
         source={imageMap[item.image]}
         style={styles.cardImage}
       />
-      {/* <img src='../assets/walking.jpeg' style={styles.cardImage} /> */}
       <View style={styles.cardContent}>
-      <View style={styles.titleRow} >
-
-        <Text style={styles.cardTitle}>{item.title}</Text>
-        <Text
-          style={[
-            styles.cardStatus,
-            { color: item.completed ? 'green' : 'red' },
-          ]}
-        >
-          {item.completed ? 'Completed' : 'Uncompleted'}
-        </Text>
-      </View>
+        <View style={styles.titleRow}>
+          <Text style={styles.cardTitle}>{item.title}</Text>
+          <Text
+            style={[
+              styles.cardStatus,
+              { color: item.completed ? 'green' : 'red' },
+            ]}
+          >
+            {item.completed ? 'Completed' : 'Uncompleted'}
+          </Text>
+        </View>
         <Text style={styles.cardDescription}>{item.description}</Text>
-        {/* <Text style={styles.cardDescription}>{item.image}</Text> */}
       </View>
     </TouchableOpacity>
   );
 }
 
-// Group of Cards Component
+
 export default function Activities() {
+  const navigation =  useNavigation()
   const cardData = [
     {
       id: 1,
       title: 'Grow ur Tree',
       description: 'Plant and grow your own tree and make it save u ',
       image: 'tree',
-      completed: true
+      completed: true,
+      onPress: () => navigation.navigate('Garden')
     },
     {
       id: 2,
-      title: 'The WaLk GaMe',
+      title: 'Lets Touch Grass',
       description: 'Walk the walk... talk the talk',
       image: 'walking',
-      completed: false
+      completed: false,
+      onPress: () => navigation.navigate('Walking') 
     },
     {
       id: 3,
-      title: 'Lets Dance',
+      title: 'Lets Jam',
       description: 'Come on...get on ur feet rn :)',
       image: 'dance',
-      completed: false
+      completed: false,
+      onPress: () => navigation.navigate('Music')
     },
   ];
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {cardData.map((item) => (
-        <Card key={item.id} item={item} />
-      ))}
-    </ScrollView>
+    <>
+      <ThoughtComponent />
+      <Points />
+      <ScrollView contentContainerStyle={styles.container}>
+        {cardData.map((item) => (
+          <Card key={item.id} item={item} onPress={item.onPress} />
+        ))}
+      </ScrollView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    alignItems: 'center', // Center the cards horizontally
+    alignItems: 'center',
   },
   card: {
     backgroundColor: '#fff',
@@ -97,7 +102,8 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     padding: 15,
-  },titleRow: {
+  },
+  titleRow: {
     flexDirection: 'row',   // Align items in a row
     justifyContent: 'space-between',  // Add space between title and status
     alignItems: 'center',
@@ -114,6 +120,5 @@ const styles = StyleSheet.create({
   },
   cardStatus: {
     fontSize: 14,
-//     fontWeight: 'bold',
-  }
+  },
 });
