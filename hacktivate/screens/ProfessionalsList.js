@@ -101,7 +101,6 @@ const ProfessionalsList = () => {
     } else {
       setFilterRating(rating); // Set new filter rating
     }
-    setIsFilterVisible(false); // Hide filter after selection
   };
 
   const handleGender = (value) => {
